@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>iOS Style Voting Project</title>
+<style>
+    /* styles.css content integrated here */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+        background: #e8ecf7;
+        display: flex;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .container {
+        background: white;
+        width: 100%;
+        max-width: 420px;
+        padding: 20px;
+        border-radius: 25px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+
+    .title {
+        text-align: center;
+        font-size: 22px;
+        margin-bottom: 15px;
+        font-weight: 700;
+    }
+.title1 {
+        text-align: center;
+        font-size: 12px;
+        margin-bottom: 15px;
+        font-weight: 700;
+    }
+
+    /* Centered & Round Image Style */
+    .main-image {
+        display: block; 
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 50%; /* Makes it a perfect circle */
+        margin: 0 auto 15px auto; /* Centers the image */
+        box-shadow: 0 0 0 5px white, 0 8px 20px rgba(0,0,0,0.15); 
+        border: 3px solid #e0e4f5;
+    }
+
+    /* iOS Input */
+    input {
+        width: 100%;
+        padding: 14px;
+        border-radius: 15px;
+        border: 2px solid #d0d4e4;
+        margin-bottom: 15px;
+        font-size: 17px;
+        background: #f7f8fc;
+    }
+
+    /* iOS Buttons */
+    .btn-group {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+    }
+
+    button {
+        flex: 1;
+        padding: 14px;
+        margin: 5px;
+        font-size: 18px;
+        border: none;
+        border-radius: 15px;
+        cursor: pointer;
+        font-weight: 600;
+        color: white;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        transition: background 0.2s; /* Added smooth transition */
+    }
+    
+    button:active {
+        opacity: 0.9;
+    }
+
+    .like-btn {
+        background: #ff8ba7;
+    }
+
+    .vote-btn {
+        background: #6d9dfc;
+    }
+    
+    /* NEW SHARE BUTTON STYLE */
+    .share-btn-container {
+        margin-top: 20px; /* Space from elements above */
+    }
+
+    .share-btn {
+        width: 100%; /* Make it full width */
+        margin: 0; /* Remove side margins from button group */
+        background: #4cd964; /* A vibrant iOS green color for sharing */
+    }
+    /* End NEW SHARE BUTTON STYLE */
+
+    .message {
+        text-align: center;
+        font-size: 17px;
+        margin-bottom: 10px;
+        font-weight: 600;
+    }
+
+    .count {
+        text-align: center;
+        font-size: 16px;
+        margin-bottom: 15px;
+        color: #333;
+    }
+	.h4{
+	text-align:center;
+}	
+    /* Moving Ticker (slow smooth animation) */
+    .ticker-box {
+        height: 200px;
+        background: #f3f6ff;
+        border-radius: 20px;
+        overflow: hidden;
+        border: 2px solid #e0e4f5;
+    }
+
+    .scroll-area {
+        display: flex;
+        flex-direction: column;
+        animation: slowScroll 25s linear infinite;
+    }
+
+    .scroll-area div {
+        padding: 12px;
+        margin: 6px 12px;
+        background: white;
+        border-radius: 12px;
+        font-size: 15px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    }
+
+    /* Slower scroll speed */
+    @keyframes slowScroll {
+        0% { transform: translateY(0); }
+        100% { transform: translateY(-50%); }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <h2 class="title">Your 1 Like & 1 Vote Matters</h2>
+     <h4 class="title1" >Ads are mandatory to help fund Babri Masjid.</h4>
+
+
+    <img src="babri.png" class="main-image" alt="Main Image">
+
+    <input id="username" type="text" placeholder="Enter your name">
+
+    <div class="btn-group">
+        <button onclick="likeFunction()" class="like-btn">👍 Like</button>
+        <button onclick="voteFunction()" class="vote-btn">🗳 Vote</button>
+    </div>
+
+    <p id="message" class="message"></p>
+
+    <p id="count" class="count">50,000 people voted</p>
+
+    <div class="ticker-box">
+        <div class="scroll-area" id="scrollArea"></div>
+    </div>
+    
+    <div class="share-btn-container">
+        <button onclick="shareFunction()" class="share-btn">🔗 Share This Project</button>
+    </div>
+</div>
+
+<script>
+    // script.js content integrated here
+    let voteCount = parseInt(localStorage.getItem("totalVotes")) || 50231;
+    const scrollArea = document.getElementById("scrollArea");
+    const message = document.getElementById("message");
+    const countDisplay = document.getElementById("count");
+
+    // DUMMY LINK for sharing
+    const shareLink = "https://www.dummy-project-link.com/vote-now";
+
+    // Load saved votes for each user
+    let userVotes = JSON.parse(localStorage.getItem("userVotes")) || {};
+
+    // 50+ Sample Names
+    const sampleNames = [
+        "Mohammad Sulaiman","Rizwan","Ayesha","Sharukh","Sameer","Shaik Rahil",
+        "Fahad","Imran","Rashid","Zubair","Aadil","Sohail","Tausif","Arshad","Faizan",
+        "Afnan","Mubarak","Abdullah","Rehan","Kareem","Arif","Sarfaraz","Naseer",
+        "Hameed","Salman","Nawaz","Junaid","Bilal","Aqib","Sajid","Sadiq","Waseem",
+        "Shahid","Ikram","Yasir","Armaan","Farhan","Ameen","Aahil","Zaid","Sulaiman",
+        "Mannan","Adnan","Ayub","Ismail","Kabir","Hassan","Shuaib","Muzammil","Feroz"
+    ];
+
+    // Function to shuffle an array (Fisher-Yates algorithm)
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    // Create a copy of the names and shuffle it for randomness on refresh
+    const shuffledNames = [...sampleNames];
+    shuffleArray(shuffledNames);
+
+    // Duplicate the SHUFFLED list for infinite scrolling
+    const movingList = [...shuffledNames, ...shuffledNames];
+
+    // Populate the scrolling area
+    movingList.forEach(name => {
+        let div = document.createElement("div");
+        div.textContent = name + " has voted";
+        scrollArea.appendChild(div);
+    });
+
+    // Show initial total votes
+    countDisplay.textContent = "Total Votes: " + voteCount.toLocaleString();
+
+    // LIKE function
+    function likeFunction() {
+        let name = document.getElementById("username").value.trim();
+        if (name === "") return alert("Please enter your name!");
+
+        message.textContent = `${name} has liked ❤️`;
+
+        let div = document.createElement("div");
+        div.textContent = `${name} has liked`;
+        scrollArea.prepend(div);
+    }
+
+    // VOTE function
+    function voteFunction() {
+        let name = document.getElementById("username").value.trim();
+        if (name === "") return alert("Please enter your name!");
+
+        if (!userVotes[name]) userVotes[name] = 0;
+
+        // Block more than 3 votes
+        if (userVotes[name] >= 3) {
+            alert("❗ You have already voted 3 times.");
+            return;
+        }
+
+        // Count this vote
+        userVotes[name]++;
+        localStorage.setItem("userVotes", JSON.stringify(userVotes));
+
+        // Increase total votes
+        voteCount++;
+        localStorage.setItem("totalVotes", voteCount);
+        
+        // Display total votes
+        countDisplay.textContent = "Total Votes: " + voteCount.toLocaleString();
+
+        message.textContent = `${name} has voted 🗳`;
+
+        let div = document.createElement("div");
+        div.textContent = `${name} has voted`;
+        scrollArea.prepend(div);
+    }
+
+    // SHARE function
+    function shareFunction() {
+        // Attempt to use the modern Web Share API first
+        if (navigator.share) {
+            navigator.share({
+                title: 'Vote Now!',
+                text: 'Your vote matters. Click the link to support the cause!',
+                url: shareLink
+            }).then(() => {
+                message.textContent = 'Link shared successfully!';
+            }).catch((error) => {
+                // If sharing fails (e.g., user cancels, or not supported), fall back to copy
+                console.log('Error sharing:', error);
+                fallbackCopy();
+            });
+        } else {
+            // Fallback for browsers that do not support Web Share API
+            fallbackCopy();
+        }
+    }
+    
+    function fallbackCopy() {
+        // Create a temporary input element
+        const tempInput = document.createElement('input');
+        tempInput.value = shareLink;
+        document.body.appendChild(tempInput);
+        
+        // Select and copy the text
+        tempInput.select();
+        document.execCommand('copy');
+        
+        // Remove the temporary element
+        document.body.removeChild(tempInput);
+        
+        message.textContent = `Link copied to clipboard: ${shareLink}`;
+    }
+</script>
+
+</body>
+</html>
