@@ -35,7 +35,7 @@
         margin-bottom: 15px;
         font-weight: 700;
     }
-.title1 {
+    .title1 {
         text-align: center;
         font-size: 12px;
         margin-bottom: 15px;
@@ -138,7 +138,8 @@
     .scroll-area {
         display: flex;
         flex-direction: column;
-        animation: slowScroll 25s linear infinite;
+        /* UPDATED: Increased duration to 90s for slower, smoother movement with 200 names */
+        animation: slowScroll 90s linear infinite; 
     }
 
     .scroll-area div {
@@ -162,7 +163,7 @@
 <div class="container">
 
     <h2 class="title">Your 1 Like & 1 Vote Matters</h2>
-     <h4 class="title1" >Ads are mandatory to help fund Babri Masjid.</h4>
+    <h4 class="title1" >Ads are mandatory to help fund Babri Masjid.</h4>
 
 
     <img src="babri.png" class="main-image" alt="Main Image">
@@ -194,37 +195,40 @@
     const message = document.getElementById("message");
     const countDisplay = document.getElementById("count");
 
-    // DUMMY LINK for sharing
+    // DUMMY LINK for sharing (Current Link Used: https://reviewsystem1.github.io/babrimasjid/)
     const shareLink = "https://reviewsystem1.github.io/babrimasjid/";
 
     // Load saved votes for each user
     let userVotes = JSON.parse(localStorage.getItem("userVotes")) || {};
 
-    // 50+ Sample Names
-   const sampleNames = [
-    // Original 50 Names
-    "Mohammad Sulaiman", "Rizwan", "Ayesha", "Sharukh", "Sameer", "Shaik Rahil",
-    "Fahad", "Imran", "Rashid", "Zubair", "Aadil", "Sohail", "Tausif", "Arshad", "Faizan",
-    "Afnan", "Mubarak", "Abdullah", "Rehan", "Kareem", "Arif", "Sarfaraz", "Naseer",
-    "Hameed", "Salman", "Nawaz", "Junaid", "Bilal", "Aqib", "Sajid", "Sadiq", "Waseem",
-    "Shahid", "Ikram", "Yasir", "Armaan", "Farhan", "Ameen", "Aahil", "Zaid", "Sulaiman",
-    "Mannan", "Adnan", "Ayub", "Ismail", "Kabir", "Hassan", "Shuaib", "Muzammil", "Feroz",
-    "Aaliya", "Afreen", "Mahira", "Sameena", "Farzana", "Nazia", "Rubina", "Sana", "Ruksana", "Mariyam",
-    "Ariba", "Gulnaz", "Nida", "Rafia", "Zainab", "Firdous", "Rihana", "Shabana", "Javeria", "Huma",
-    "Mehnaz", "Sofia", "Humaira", "Fareeda", "Afsa", "Shazia", "Rubeena", "Uzma", "Tasneem", "Zara",
-    "Liyana", "Naeema", "Iram", "Arshiya", "Hiba", "Areeba", "Sumbul", "Sabina", "Fiza", "Zoya",
-    "Ayaan", "Rayyan", "Huzaifa", "Danish", "Saif", "Farooq", "Maaz", "Zameer", "Abrar", "Aman",
-    "Irfan", "Shadab", "Touqeer", "Shabbir", "Zain", "Suhail", "Arifuddin", "Kaleem", "Rashad", "Firoz",
-    "Tahir", "Nadeem", "Asif", "Azhar", "Noman", "Imtiyaz", "Kasim", "Shamsuddin", "Younus", "Khalid",
-    "Arbaz", "Murtuza", "Faheem", "Siraj", "Jibran", "Faisal", "Owais", "Azeem", "Mateen", "Riyaz",
-    "Shifa", "Madiha", "Insha", "Sehrish", "Zulekha", "Haleema", "Sumaira", "Aamna", "Nargis", "Sadiya",
-    "Amreen", "Jannat", "Ruqaiya", "Tabassum", "Khadija", "Afsana", "Samreen", "Alfia", "Sameed", "Faiz",
-    "Shan", "Mubashir", "Ehtesham", "Abraruddin", "Mohsin", "Rashiq", "Yousuf", "Taha", "Iqbal", "Wali",
-    "Ehsan", "Faisaluddin", "Javed", "Ahsan", "Mueed", "Hamid", "Naushad", "Razak", "Kulsum", "Sakeena",
-    "Ruhi", "Iqra", "Aabida", "Sidra", "Adeeba", "Fariha", "Sehr", "Mahnoor", "Faris", "Affan",
-    "Umair", "Fahim", "Aadiluddin", "Tauheed", "Rayan", "Junaiduddin", "Ashfaq", "Wajid", "Misbah", "Rukhsar",
-    "Nazreen", "Shameem", "Afsheen", "Haniya", "Aynaz", "Sehrin", "Aleena", "Mahira"
-];
+    // --- FULL LIST OF 200 NAMES ---
+    const sampleNames = [
+        // Original 50 Names
+        "Mohammad Sulaiman", "Rizwan", "Ayesha", "Sharukh", "Sameer", "Shaik Rahil",
+        "Fahad", "Imran", "Rashid", "Zubair", "Aadil", "Sohail", "Tausif", "Arshad", "Faizan",
+        "Afnan", "Mubarak", "Abdullah", "Rehan", "Kareem", "Arif", "Sarfaraz", "Naseer",
+        "Hameed", "Salman", "Nawaz", "Junaid", "Bilal", "Aqib", "Sajid", "Sadiq", "Waseem",
+        "Shahid", "Ikram", "Yasir", "Armaan", "Farhan", "Ameen", "Aahil", "Zaid", "Sulaiman",
+        "Mannan", "Adnan", "Ayub", "Ismail", "Kabir", "Hassan", "Shuaib", "Muzammil", "Feroz",
+        // 150 New Mixed Names
+        "Aaliya", "Afreen", "Mahira", "Sameena", "Farzana", "Nazia", "Rubina", "Sana", "Ruksana", "Mariyam",
+        "Ariba", "Gulnaz", "Nida", "Rafia", "Zainab", "Firdous", "Rihana", "Shabana", "Javeria", "Huma",
+        "Mehnaz", "Sofia", "Humaira", "Fareeda", "Afsa", "Shazia", "Rubeena", "Uzma", "Tasneem", "Zara",
+        "Liyana", "Naeema", "Iram", "Arshiya", "Hiba", "Areeba", "Sumbul", "Sabina", "Fiza", "Zoya",
+        "Ayaan", "Rayyan", "Huzaifa", "Danish", "Saif", "Farooq", "Maaz", "Zameer", "Abrar", "Aman",
+        "Irfan", "Shadab", "Touqeer", "Shabbir", "Zain", "Suhail", "Arifuddin", "Kaleem", "Rashad", "Firoz",
+        "Tahir", "Nadeem", "Asif", "Azhar", "Noman", "Imtiyaz", "Kasim", "Shamsuddin", "Younus", "Khalid",
+        "Arbaz", "Murtuza", "Faheem", "Siraj", "Jibran", "Faisal", "Owais", "Azeem", "Mateen", "Riyaz",
+        "Shifa", "Madiha", "Insha", "Sehrish", "Zulekha", "Haleema", "Sumaira", "Aamna", "Nargis", "Sadiya",
+        "Amreen", "Jannat", "Ruqaiya", "Tabassum", "Khadija", "Afsana", "Samreen", "Alfia", "Sameed", "Faiz",
+        "Shan", "Mubashir", "Ehtesham", "Abraruddin", "Mohsin", "Rashiq", "Yousuf", "Taha", "Iqbal", "Wali",
+        "Ehsan", "Faisaluddin", "Javed", "Ahsan", "Mueed", "Hamid", "Naushad", "Razak", "Kulsum", "Sakeena",
+        "Ruhi", "Iqra", "Aabida", "Sidra", "Adeeba", "Fariha", "Sehr", "Mahnoor", "Faris", "Affan",
+        "Umair", "Fahim", "Aadiluddin", "Tauheed", "Rayan", "Junaiduddin", "Ashfaq", "Wajid", "Misbah", "Rukhsar",
+        "Nazreen", "Shameem", "Afsheen", "Haniya", "Aynaz", "Sehrin", "Aleena", "Mahira"
+    ];
+    // --- END OF 200 NAMES LIST ---
+
 
     // Function to shuffle an array (Fisher-Yates algorithm)
     function shuffleArray(array) {
@@ -335,5 +339,3 @@
 </body>
 
 </html>
-
-
